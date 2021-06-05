@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValueParser = void 0;
 const ValueDefinitions_1 = require("./ValueDefinitions");
 class ValueParser {
-    autoVent;
-    constructor(_autoVent) {
-        this.autoVent = _autoVent;
+    autovent;
+    constructor(_autovent) {
+        this.autovent = _autovent;
     }
     parseOperatingMode(_response) {
         let value = _response.slice(-2);
@@ -21,7 +21,7 @@ class ValueParser {
             case "04":
                 return ValueDefinitions_1.OperatingModes_Int.SUMMER_EX;
             default:
-                this.autoVent.log.warn("UNHANDLED VALUE @parseOperatingMode! Was: " + value);
+                this.autovent.log.warn("UNHANDLED VALUE @parseOperatingMode! Was: " + value);
                 return ValueDefinitions_1.OperatingModes_Int.ERROR;
         }
     }
@@ -50,7 +50,7 @@ class ValueParser {
             case "6":
                 return ValueDefinitions_1.FanLevels_Int.LINEAR;
             default:
-                this.autoVent.log.warn("UNHANDLED VALUE @parseManualFanLevel! Was: " + value);
+                this.autovent.log.warn("UNHANDLED VALUE @parseManualFanLevel! Was: " + value);
                 return ValueDefinitions_1.FanLevels_Int.ERROR;
         }
     }
@@ -73,13 +73,13 @@ class ValueParser {
             case "4":
                 return ValueDefinitions_1.FanLevels_Int.LEVEL_4;
             default:
-                this.autoVent.log.warn("UNHANDLED VALUE @parseCurrentFanLevel! Was: " + value);
+                this.autovent.log.warn("UNHANDLED VALUE @parseCurrentFanLevel! Was: " + value);
                 return ValueDefinitions_1.FanLevels_Int.ERROR;
         }
     }
     parseTemp_Outside(_response) {
         let temp = (this.hexToInt(_response.slice(-4)) / 10.0);
-        this.autoVent.writeLog("New TEMP: " + temp);
+        this.autovent.writeLog("New TEMP: " + temp);
         return temp;
     }
     hexToInt(_hex) {

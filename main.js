@@ -3,13 +3,13 @@
  * Created with @iobroker/create-adapter v1.34.0
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.autoVent = void 0;
+exports.autovent = void 0;
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
 const Connector_1 = require("./scripts/Connector");
 const ValueDefinitions_1 = require("./scripts/ValueDefinitions");
-class autoVent extends utils.Adapter {
+class autovent extends utils.Adapter {
     connector;
     ip = "192.168.000.000";
     port = 502;
@@ -17,7 +17,7 @@ class autoVent extends utils.Adapter {
     constructor(options = {}) {
         super({
             ...options,
-            name: "autoVent",
+            name: "autovent",
         });
         this.on("ready", this.onReady.bind(this));
         this.on("objectChange", this.onObjectChange.bind(this));
@@ -306,12 +306,12 @@ class autoVent extends utils.Adapter {
         }
     }
 }
-exports.autoVent = autoVent;
+exports.autovent = autovent;
 if (require.main !== module) {
     // Export the constructor in compact mode
-    module.exports = (options) => new autoVent(options);
+    module.exports = (options) => new autovent(options);
 }
 else {
     // otherwise start the instance directly
-    (() => new autoVent())();
+    (() => new autovent())();
 }

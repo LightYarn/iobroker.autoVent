@@ -18,7 +18,7 @@ class Connector {
     currentReadDataIndex;
     ipAddress;
     port;
-    autoVent;
+    autovent;
     valueParser;
     currentCommandMode = COMMANDMODES.NONE;
     writeData_Address;
@@ -26,19 +26,19 @@ class Connector {
     socketConnected = false;
     timer;
     ventCubeData;
-    constructor(_ipAddress, _port, _autoVent) {
-        this.autoVent = _autoVent;
+    constructor(_ipAddress, _port, _autovent) {
+        this.autovent = _autovent;
         this.outputStream = new Buffer(0);
         this.currentReadDataIndex = 0;
         this.ipAddress = _ipAddress;
         this.port = _port;
-        this.valueParser = new ValueParser_1.ValueParser(_autoVent);
+        this.valueParser = new ValueParser_1.ValueParser(_autovent);
         this.ventCubeData = new VentCubeData_1.VentCubeData();
     }
     getVentCubeData() {
-        this.autoVent.writeLog("Trying to get VentCubeData...");
+        this.autovent.writeLog("Trying to get VentCubeData...");
         if (this.currentCommandMode == COMMANDMODES.NONE) {
-            this.autoVent.writeLog("Success! Getting VentCubeData...");
+            this.autovent.writeLog("Success! Getting VentCubeData...");
             this.currentCommandMode = COMMANDMODES.initialRead;
             this.prepareSocket();
             if (this.socket != null) {
@@ -46,13 +46,13 @@ class Connector {
                     this.executeCurrentCommand();
                 }
                 else {
-                    this.autoVent.writeLog("Connecting Socket...");
+                    this.autovent.writeLog("Connecting Socket...");
                     this.socket.connect(this.port, this.ipAddress);
                 }
             }
         }
         else {
-            this.autoVent.log.warn("Tried to GET VentCubeData but CommandMode is not in the correct state! Was: " + this.currentCommandMode);
+            this.autovent.log.warn("Tried to GET VentCubeData but CommandMode is not in the correct state! Was: " + this.currentCommandMode);
         }
     }
     setVentCubeData(_address, _value) {
@@ -66,13 +66,13 @@ class Connector {
                     this.executeCurrentCommand();
                 }
                 else {
-                    this.autoVent.writeLog("Connecting Socket...");
+                    this.autovent.writeLog("Connecting Socket...");
                     this.socket.connect(this.port, this.ipAddress);
                 }
             }
         }
         else {
-            this.autoVent.log.warn("Tried to SET VentCubeData but CommandMode is not in the correct state! Was: " + this.currentCommandMode);
+            this.autovent.log.warn("Tried to SET VentCubeData but CommandMode is not in the correct state! Was: " + this.currentCommandMode);
         }
     }
     prepareSocket() {
@@ -97,7 +97,7 @@ class Connector {
     }
     write() {
         if (this.writeData_Address != null && this.writeData_Value != null) {
-            this.autoVent.writeLog("setting " + ValueDefinitions_1.RegisterAddresses[this.writeData_Address] + " to value: " + this.writeData_Value);
+            this.autovent.writeLog("setting " + ValueDefinitions_1.RegisterAddresses[this.writeData_Address] + " to value: " + this.writeData_Value);
             this.outputStream = Buffer.from(this.prepareMessage_write(this.writeData_Address, this.writeData_Value));
             if (this.socket != null) {
                 this.socket.write(this.outputStream);
@@ -106,10 +106,10 @@ class Connector {
     }
     readData() {
         if (this.ventCubeData == null) {
-            this.autoVent.writeLog("Creating new ventCubeData object");
+            this.autovent.writeLog("Creating new ventCubeData object");
             this.ventCubeData = new VentCubeData_1.VentCubeData();
         }
-        this.autoVent.writeLog("reading Data! Index: " + this.currentReadDataIndex);
+        this.autovent.writeLog("reading Data! Index: " + this.currentReadDataIndex);
         switch (this.currentReadDataIndex) {
             case ValueDefinitions_1.ReadDataIndex.OperationMode:
                 this.read(ValueDefinitions_1.RegisterAddresses.OperationMode);
@@ -124,9 +124,9 @@ class Connector {
                 this.read(ValueDefinitions_1.RegisterAddresses.TempValue_Outside);
                 break;
             case ValueDefinitions_1.ReadDataIndex.DONE:
-                this.autoVent.writeLog("READ DONE");
-                this.autoVent.logVentCubeDataAdapter();
-                this.autoVent.setStates(true);
+                this.autovent.writeLog("READ DONE");
+                this.autovent.logVentCubeDataAdapter();
+                this.autovent.setStates(true);
                 this.currentReadDataIndex = 0;
                 this.currentCommandMode = COMMANDMODES.NONE;
                 if (this.socket != null) {
@@ -135,7 +135,7 @@ class Connector {
                 if (this.timer) {
                     clearTimeout(this.timer);
                 }
-                this.timer = setTimeout(function () { this.getVentCubeData(); }.bind(this), this.autoVent.refreshRate * 60000);
+                this.timer = setTimeout(function () { this.getVentCubeData(); }.bind(this), this.autovent.refreshRate * 60000);
                 break;
             default:
                 throw new Error("UNHANDLED RED DATA-INDEX! WAS: " + this.currentReadDataIndex);
@@ -252,7 +252,7 @@ class Connector {
             case ValueDefinitions_1.ReadDataIndex.DONE:
                 break;
             default:
-                this.autoVent.log.error("UNHANDLED RED DATA-INDEX! WAS: " + this.currentReadDataIndex);
+                this.autovent.log.error("UNHANDLED RED DATA-INDEX! WAS: " + this.currentReadDataIndex);
                 throw new Error("UNHANDLED RED DATA-INDEX! WAS: " + this.currentReadDataIndex);
         }
         this.readData();
@@ -267,11 +267,11 @@ class Connector {
             }
             plainResponse += hexString;
         }
-        this.autoVent.writeLog(responseMessage + plainResponse);
+        this.autovent.writeLog(responseMessage + plainResponse);
         this.currentCommandMode = COMMANDMODES.NONE;
     }
     executeCurrentCommand() {
-        this.autoVent.writeLog("CurrentCommandMode: " + this.currentCommandMode);
+        this.autovent.writeLog("CurrentCommandMode: " + this.currentCommandMode);
         switch (this.currentCommandMode) {
             case COMMANDMODES.initialRead:
                 this.readData();
@@ -280,17 +280,17 @@ class Connector {
                 this.write();
                 return;
             default:
-                this.autoVent.log.error(" Unhandled CurrentCommandMode! Was: " + this.currentCommandMode);
+                this.autovent.log.error(" Unhandled CurrentCommandMode! Was: " + this.currentCommandMode);
                 return;
         }
     }
     socketEvent_close(hadError) {
         if (hadError) {
-            this.autoVent.writeLog("SOCKET-EVENT:  CLOSE!   Had Error: " + hadError);
+            this.autovent.writeLog("SOCKET-EVENT:  CLOSE!   Had Error: " + hadError);
         }
     }
     socketEvent_connect() {
-        this.autoVent.writeLog("Socket connected!");
+        this.autovent.writeLog("Socket connected!");
         this.socketConnected = true;
         this.executeCurrentCommand();
     }
@@ -300,7 +300,7 @@ class Connector {
         let responseFunctionCode = parseInt(dv.getUint8(7).toString());
         // ERROR RESPONSE
         if (responseFunctionCode > 80) {
-            this.autoVent.log.error("ERROR RESPONSE!! " + responseFunctionCode + "   ERROR-CODE: " + parseInt(dv.getUint8(8).toString(16)));
+            this.autovent.log.error("ERROR RESPONSE!! " + responseFunctionCode + "   ERROR-CODE: " + parseInt(dv.getUint8(8).toString(16)));
         }
         else {
             switch (responseFunctionCode) {
@@ -311,7 +311,7 @@ class Connector {
                     this.handleAnswer_WriteHoldingRegisters(dv);
                     break;
                 default:
-                    this.autoVent.log.warn("UNHANDLED FUNCTION-CODE: " + responseFunctionCode);
+                    this.autovent.log.warn("UNHANDLED FUNCTION-CODE: " + responseFunctionCode);
                     break;
             }
         }
@@ -324,10 +324,10 @@ class Connector {
     }
     socketEvent_error(err) {
         this.socketConnected = false;
-        this.autoVent.log.error("SOCKET-EVENT:  ERROR!   " + err.message);
+        this.autovent.log.error("SOCKET-EVENT:  ERROR!   " + err.message);
     }
     socketEvent_lookup(err, address, family, host) {
-        this.autoVent.writeLog("SOCKET-EVENT:  LOOKUP");
+        this.autovent.writeLog("SOCKET-EVENT:  LOOKUP");
         if (err != null) {
             console.log("ERROR: " + err);
         }
