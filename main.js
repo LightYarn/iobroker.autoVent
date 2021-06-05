@@ -7,8 +7,8 @@ exports.autoVent = void 0;
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-const Connector_1 = require("./build/scripts/Connector");
-const ValueDefinitions_1 = require("./build/scripts/ValueDefinitions");
+const Connector_1 = require("./scripts/Connector");
+const ValueDefinitions_1 = require("./scripts/ValueDefinitions");
 class autoVent extends utils.Adapter {
     connector;
     ip = "192.168.000.000";

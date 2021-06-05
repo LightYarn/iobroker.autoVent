@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "autoVent",
-        "main" : "build/main.js",
+        "main" : "main.js",
         "version": "0.1.0",
         "title": "autoVent",
         "titleLang": "VentCube Control",
