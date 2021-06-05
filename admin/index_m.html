@@ -1,129 +1,174 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@LightYarn 
+Excodibur
+/
+ioBroker.schwoerer-ventcube
+1
+12
+Code
+Issues
+3
+Pull requests
+3
+Actions
+Projects
+Security
+Insights
+ioBroker.schwoerer-ventcube/admin/index_m.html
+
+Excodibur chore: release v1.3.0
+…
+Latest commit 2a4533f on 23 Sep 2020
+ History
+ 0 contributors
+130 lines (104 sloc)  3.92 KB
+  
 <html>
 
 <head>
-    <!-- Load ioBroker scripts and styles-->
-    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
-    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
-    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+	<!-- Load ioBroker scripts and styles-->
+	<link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+	<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 
-    <script type="text/javascript" src="../../js/translate.js"></script>
-    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
-    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+	<script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
-    <!-- Load our own files -->
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="words.js"></script>
+	<script type="text/javascript" src="../../js/translate.js"></script>
+	<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+	<script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-    <script type="text/javascript">
-      // This will be called by the admin adapter when the settings page loads
-      function load(settings, onChange) 
-	  {
-          // example: select elements with id=key and class=value and insert value
-          if (!settings) return;
-		  
-          $('.value').each(function () 
-		  {
-              var $key = $(this);
-              var id = $key.attr('id');
-              if ($key.attr('type') === 'checkbox') 
-			  {
-                  // do not call onChange direct, because onChange could expect some arguments
-                  $key.prop('checked', settings[id])
-                      .on('change', () => onChange())
-                      ;
-              } 
-			  else 
-			  {
-                  // do not call onChange direct, because onChange could expect some arguments
-                  $key.val(settings[id])
-                      .on('change', () => onChange())
-                      .on('keyup', () => onChange())
-                      ;
-              }
-          });
-          onChange(false);
-          
-		  // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-          if (M) 
-		  {
-			M.updateTextFields();
-		  }
-      }
+	<!-- Load our own files -->
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script type="text/javascript" src="words.js"></script>
 
-      // This will be called by the admin adapter when the user presses the save button
-      function save(callback) 
-	  {
-          // example: select elements with class=value and build settings object
-          var obj = {};
-          $('.value').each(function () 
-		  {
-              var $this = $(this);
-              if ($this.attr('type') === 'checkbox') 
-			  {
-                  obj[$this.attr('id')] = $this.prop('checked');
-              } 
-			  else 
-			  {
-                  obj[$this.attr('id')] = $this.val();
-              }
-          });
-          callback(obj);
-      }
-  </script>
+	<script type="text/javascript">
+		// This will be called by the admin adapter when the settings page loads
+		function load(settings, onChange) {
+			// example: select elements with id=key and class=value and insert value
+			if (!settings) return;
+			$('.value').each(function () {
+				var $key = $(this);
+				var id = $key.attr('id');
+				if ($key.attr('type') === 'checkbox') {
+					// do not call onChange direct, because onChange could expect some arguments
+					$key.prop('checked', settings[id])
+						.on('change', () => onChange())
+						;
+				} else {
+					// do not call onChange direct, because onChange could expect some arguments
+					$key.val(settings[id])
+						.on('change', () => onChange())
+						.on('keyup', () => onChange())
+						;
+				}
+			});
+			onChange(false);
+			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+			if (M) M.updateTextFields();
+		}
+
+		// This will be called by the admin adapter when the user presses the save button
+		function save(callback) {
+			// example: select elements with class=value and build settings object
+			var obj = {};
+			$('.value').each(function () {
+				var $this = $(this);
+				if ($this.attr('type') === 'checkbox') {
+					obj[$this.attr('id')] = $this.prop('checked');
+				} else {
+					obj[$this.attr('id')] = $this.val();
+				}
+			});
+			callback(obj);
+		}
+	</script>
+
 </head>
 
-
 <body>
-  <!-- you have to put your config page in a div with id adapter-container -->
-  <div class="m adapter-container">
-    
 
-    <div class="row">
-      <div class="input-field col s6">
-        <img src="smartCube.png" class="logo">
-      </div>
-    </div>
+	<div class="m adapter-container">
 
-    <div class="row">
-      <div class="col s12">
-        <p class="translate">VentCube Control settings</p>
-      </div>
-    </div>
+		<div class="row">
+			<div class="col s12 m4 l2">
+				<img src="schwoerer-ventcube.png" class="logo">
+			</div>
+		</div>
 
-    <div class="row">
-      <div class="col s12 m5 l5">
-        <label class="translate" for="adresse">address</label>
-        <input class="value string" id="ventCubeIP" type="text" />
-      </div>
-      <div class="col s7 m4 l4">
-        <label class="translate" for="interval">interval</label>
-        <input class="value number" id="refreshRate" min="1" max="60" type="number" />
-      </div>
-      <div class="col s5 m3 l3">
-        <input class="value" id="doLog" type="checkbox" />
-        <label class="translate" for="doLog">doLog</label>
-      </div> 
-    </div>
+		<div class="row">
 
-    <div class="row">
-      <div class="col s12">
-        <br><br>
-      </div>
-    </div>
-    
+			<div class="col s12">
+				<h6 class="translate title" style="background-color:#174475;">basic settings</h6>
+			</div>
 
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="server" />
+				<label for="server" class="translate">server</label>
+			</div>
 
-    <div class="row">
-      <div class="col s12">
-        <p class="translate">Description</p>
-      </div>
-    </div>
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="port" />
+				<label for="port" class="translate">port</label>
+			</div>
 
-  </div>
-  <!-- /div -->
-  </div>
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="interval" />
+				<label for="interval" class="translate">interval</label>
+			</div>
+
+			<div class="col s12">
+				<h6 class="translate title" style="background-color:#174475;">connection settings</h6>
+			</div>
+
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="requesttimeoutms" />
+				<label for="requesttimeoutms" class="translate">request timeout</label>
+			</div>
+
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="reconnectattempts" />
+				<label for="reconnectattempts" class="translate">reconnect attempts</label>
+			</div>
+
+			<div class="col s6 input-field">
+				<input type="text" class="value" id="reconnectdelayms" />
+				<label for="reconnectdelayms" class="translate">reconnect delay ms</label>
+			</div>
+
+			<div class="col s12">
+				<h6 class="translate title" style="background-color:#174475;">advanced settings</h6>
+			</div>
+
+			<div class="col s6 checkbox">
+				<input type="checkbox" class="value" id="advancedfunctions" />
+				<label for="advancedfunctions" class="translate">advanced functions</label>
+
+				<div class="translate">description advanced functions</div>
+			</div>
+		</div>
+
+	</div>
+
 </body>
 
 </html>
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
