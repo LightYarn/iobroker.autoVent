@@ -3,20 +3,10 @@
     {
         "name": "autovent",
         "main" : "main.js",
-<<<<<<< HEAD
-        "version": "0.2.0",
-        "news": 
-		{
-            
-        },         
-        "desc": 
-        {
-=======
         "version": "0.1.0",
         "title": "autovent",
         "titleLang": "VentCube Control",
         "desc": {
->>>>>>> parent of d393176 (update)
             "en": 		"VentCube Control",
             "de": 		"VentCube Control",
             "ru": 		"VentCube Control",
@@ -31,11 +21,8 @@
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "loglevel": "info",
-<<<<<<< HEAD
+
         "icon": "autovent.png",
-=======
-        "icon": "smartCube.png",
->>>>>>> parent of d393176 (update)
         "materialize": true,
         "compact": true,
         "enabled": true,
