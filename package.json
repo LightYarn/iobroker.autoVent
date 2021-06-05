@@ -1,7 +1,7 @@
 {
   "name": "autovent",
   "version": "0.1.0",
-  "description": "autoVent",
+  "description": "autovent",
   "author": {
     "name": "LightYarn"
   },
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/LightYarn/iobroker.autoVent"
+    "url": "https://github.com/LightYarn/iobroker.autovent"
   },
   "main": "build/main.js",
   "scripts": {

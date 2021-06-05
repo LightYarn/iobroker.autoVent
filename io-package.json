@@ -1,9 +1,9 @@
 {
     "common": {
-        "name": "autoVent",
+        "name": "autovent",
         "main" : "main.js",
         "version": "0.1.0",
-        "title": "autoVent",
+        "title": "autovent",
         "titleLang": "VentCube Control",
         "desc": {
             "en": 		"VentCube Control",
