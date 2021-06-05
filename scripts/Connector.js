@@ -91,14 +91,14 @@ class Connector {
     }
     readFunctionStates(callback) {
         this.context.log.debug("Reading latest states from Ventcube");
-        for (const [func, attributes] of Object.entries(parameters_1.SchwoererParameter)) {
+        for (const [func, attributes] of Object.entries(parameters_1.VentCubeParameters)) {
             //Check if advanced functions should be retrieved as well
             if ((attributes.category == "advanced") && (!this.useAdvancedFunctions))
                 continue;
-            const mayRead = attributes.modbus_r > -1 ? true : false;
+            const mayRead = attributes.modbus_read > -1 ? true : false;
             if (mayRead) {
-                this.context.log.debug("checking state: " + func + ":" + attributes.modbus_r);
-                this.readDataFromHoldingRegister(callback, func, attributes.modbus_r);
+                this.context.log.debug("checking state: " + func + ":" + attributes.modbus_read);
+                this.readDataFromHoldingRegister(callback, func, attributes.modbus_read);
             }
         }
         this.readTimerId = setTimeout(function () { this.readFunctionStates(callback); }.bind(this), this.readInterval * 1000);

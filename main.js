@@ -31,61 +31,11 @@ class autovent extends utils.Adapter {
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             this.log.debug("config: " + this.config);
             //Setup state objects for Schwoerer parameters
-            for (const [func, attributes] of Object.entries(parameters_1.SchwoererParameter)) {
+            for (const [func, attributes] of Object.entries(parameters_1.VentCubeParameters)) {
                 //Potentially skip parameters marked as "advanced"
                 if ((attributes.category == "advanced") && (!this.config.advancedfunctions))
                     continue;
-                this.log.info("Setting up state for " + func);
-                const mayRead = attributes.modbus_r > -1 ? true : false;
-                const mayWrite = attributes.modbus_w > -1 ? true : false;
-                //Prepare common section for object
-                const commonSettings = {
-                    name: attributes.descr,
-                    type: "number",
-                    role: "value",
-                    read: mayRead,
-                    write: mayWrite,
-                };
-                //Add some optional parameters to config
-                if (attributes.value_def.unit)
-                    commonSettings.unit = attributes.value_def.unit;
-                if (attributes.value_type == "choice") {
-                    commonSettings.states = attributes.value_def;
-                    const numberOfKeys = Object.keys(attributes.value_def).length;
-                    if (numberOfKeys == 2)
-                        (mayWrite) ? commonSettings.role = "switch" : commonSettings.role = "sensor";
-                    else
-                        (mayWrite) ? commonSettings.role = "level.mode" : commonSettings.role = "value";
-                }
-                if (attributes.value_type == "range") {
-                    commonSettings.min = attributes.value_def.min;
-                    commonSettings.max = attributes.value_def.max;
-                }
-                //Set some more specific roles
-                if (attributes.value_def.unit == "°C")
-                    (mayWrite) ? commonSettings.role = "level.temperature" : commonSettings.role = "value.temperature";
-                if (attributes.value_def.unit == "rpm")
-                    commonSettings.role = "value.speed";
-                //Individual treatment for special cases
-                if (attributes.common_role_overwrite)
-                    commonSettings.role = attributes.common_role_overwrite;
-                await this.setObjectNotExistsAsync("parameters." + func, {
-                    type: "state",
-                    common: commonSettings,
-                    native: {},
-                });
-                //Have a corresponding "lastUpdate" object where a timestamp of data-retrieval is stored
-                await this.setObjectNotExistsAsync("lastUpdate." + func, {
-                    type: "state",
-                    common: {
-                        name: attributes.descr,
-                        type: "string",
-                        role: "date",
-                        read: mayRead,
-                        write: false
-                    },
-                    native: {},
-                });
+                await this.setupStates(attributes, func);
             }
             // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
             this.subscribeStates("parameters.*");
@@ -100,18 +50,71 @@ class autovent extends utils.Adapter {
             Promise.reject(error.message);
         }
     }
+    async setupStates(attributes, func) {
+        this.log.info("Setting up state for " + func);
+        const mayRead = attributes.modbus_read > -1 ? true : false;
+        const mayWrite = attributes.modbus_write > -1 ? true : false;
+        //Prepare common section for object
+        const commonSettings = {
+            name: attributes.descr,
+            type: "number",
+            role: "value",
+            read: mayRead,
+            write: mayWrite,
+        };
+        //Add some optional parameters to config
+        if (attributes.value_def.unit)
+            commonSettings.unit = attributes.value_def.unit;
+        if (attributes.value_type == "choice") {
+            commonSettings.states = attributes.value_def;
+            const numberOfKeys = Object.keys(attributes.value_def).length;
+            if (numberOfKeys == 2)
+                (mayWrite) ? commonSettings.role = "switch" : commonSettings.role = "sensor";
+            else
+                (mayWrite) ? commonSettings.role = "level.mode" : commonSettings.role = "value";
+        }
+        if (attributes.value_type == "range") {
+            commonSettings.min = attributes.value_def.min;
+            commonSettings.max = attributes.value_def.max;
+        }
+        //Set some more specific roles
+        if (attributes.value_def.unit == "°C")
+            (mayWrite) ? commonSettings.role = "level.temperature" : commonSettings.role = "value.temperature";
+        if (attributes.value_def.unit == "rpm")
+            commonSettings.role = "value.speed";
+        //Individual treatment for special cases
+        if (attributes.common_role_overwrite)
+            commonSettings.role = attributes.common_role_overwrite;
+        await this.setObjectNotExistsAsync("parameters." + func, {
+            type: "state",
+            common: commonSettings,
+            native: {},
+        });
+        //Have a corresponding "lastUpdate" object where a timestamp of data-retrieval is stored
+        await this.setObjectNotExistsAsync("lastUpdate." + func, {
+            type: "state",
+            common: {
+                name: attributes.descr,
+                type: "string",
+                role: "date",
+                read: mayRead,
+                write: false
+            },
+            native: {},
+        });
+    }
     syncReadData(func, value, time) {
         //handle
         this.log.debug("Updating state: " + func + " with value: " + value);
         //parse parameter if needed
         let parameterParsed = value;
-        const parameterType = parameters_1.SchwoererParameter[func].value_type;
+        const parameterType = parameters_1.VentCubeParameters[func].value_type;
         switch (parameterType) {
             /*case "choice":
                     parameterParsed = SchwoererParameter[func].value_def[value];
                 break;*/
             case "range":
-                const unit = parameters_1.SchwoererParameter[func].value_def.unit;
+                const unit = parameters_1.VentCubeParameters[func].value_def.unit;
                 switch (unit) {
                     case "°C":
                         parameterParsed = (value / 10);
@@ -172,12 +175,12 @@ class autovent extends utils.Adapter {
     performManualStateChange(func, value) {
         //Apparently temperatures (°C) are stored as 3 digit numbers in Ventcube, but as we parse them
         //like xxx => xx.x °C we need to reverse this before updating
-        const unit = parameters_1.SchwoererParameter[func].value_def.unit;
+        const unit = parameters_1.VentCubeParameters[func].value_def.unit;
         if ((unit != undefined) && (unit == "°C")) {
             value = value * 10;
         }
         //Value validation not needed, as ObjectState has all allowed values already configured.
-        const writeRegister = parameters_1.SchwoererParameter[func].modbus_w;
+        const writeRegister = parameters_1.VentCubeParameters[func].modbus_write;
         this.connector.writeDataToRegister(func, writeRegister, parseInt(value));
     }
     writeLog(message) {
