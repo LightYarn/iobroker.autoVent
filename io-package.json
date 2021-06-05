@@ -2,9 +2,8 @@
     "common": 
     {
         "name": "autovent",
-        "title": "autovent",
-        "titleLang": "VentCube Automation",
         "main" : "main.js",
+<<<<<<< HEAD
         "version": "0.2.0",
         "news": 
 		{
@@ -12,6 +11,12 @@
         },         
         "desc": 
         {
+=======
+        "version": "0.1.0",
+        "title": "autovent",
+        "titleLang": "VentCube Control",
+        "desc": {
+>>>>>>> parent of d393176 (update)
             "en": 		"VentCube Control",
             "de": 		"VentCube Control",
             "ru": 		"VentCube Control",
@@ -26,7 +31,11 @@
         "platform": "Javascript/Node.js",
         "mode": "daemon",
         "loglevel": "info",
+<<<<<<< HEAD
         "icon": "autovent.png",
+=======
+        "icon": "smartCube.png",
+>>>>>>> parent of d393176 (update)
         "materialize": true,
         "compact": true,
         "enabled": true,
@@ -36,7 +45,10 @@
             "VentCube",
             "Schwoerer", "Schwörer"      
         ],
-        
+        "news": 
+		{
+            
+        },
         "readme": "",
         "type": "climate-control",
         "license": "MIT",
@@ -45,37 +57,12 @@
             "email": ""
         }]
     },
-    "native": {
-        "server": "192.168.2.126",
-        "port": 502,
-        "interval": 30,
-        "advancedfunctions": true,
-        "reconnectattempts": 10,
-        "reconnectdelayms": 10000,
-        "requesttimeoutms": 5000
+    "native": 
+	{
+		"ventCubeIP": "192.168.0.0",
+		"refreshRate": 5
+        
     },
     "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Adapter-Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Whether the adapter is connected to Ventcube (Modbus-server)",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
+    "instanceObjects": []
 }
