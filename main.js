@@ -17,9 +17,7 @@ class autovent extends utils.Adapter {
             name: "autovent",
         });
         this.on("ready", this.onReady.bind(this));
-        this.on("objectChange", this.onObjectChange.bind(this));
         this.on("stateChange", this.onStateChange.bind(this));
-        // this.on("message",   this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
     }
     /**
@@ -141,19 +139,6 @@ class autovent extends utils.Adapter {
         }
     }
     /**
-     * Is called if a subscribed object changes
-     */
-    onObjectChange(id, obj) {
-        if (obj) {
-            // The object was changed
-            this.writeLog(`object ${id} changed: ${JSON.stringify(obj)}`);
-        }
-        else {
-            // The object was deleted
-            this.writeLog(`object ${id} deleted`);
-        }
-    }
-    /**
      * Is called if a subscribed state changes
      */
     onStateChange(id, state) {
@@ -182,11 +167,6 @@ class autovent extends utils.Adapter {
         //Value validation not needed, as ObjectState has all allowed values already configured.
         const writeRegister = parameters_1.VentCubeParameters[func].modbus_write;
         this.connector.writeDataToRegister(func, writeRegister, parseInt(value));
-    }
-    writeLog(message) {
-        if (this.config.doLog) {
-            this.log.info(message);
-        }
     }
 }
 exports.autovent = autovent;
