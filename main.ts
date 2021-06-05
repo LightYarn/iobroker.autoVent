@@ -36,12 +36,11 @@ export class autoVent extends utils.Adapter
     port: number = 502;
     refreshRate: number = 5;
 
-    public constructor(options: Partial<ioBroker.AdapterOptions> = {})
-    {
-        super({
-            ...options,
-            name: "autoVent",
-        });
+    public constructor(options: Partial<utils.AdapterOptions> = {}) {
+		super({
+			...options,
+			name: "template",
+		});
         this.on("ready",        this.onReady.bind(this));
         this.on("objectChange", this.onObjectChange.bind(this));
         this.on("stateChange",  this.onStateChange.bind(this));
@@ -426,7 +425,7 @@ export class autoVent extends utils.Adapter
 if (require.main !== module) 
 {
 	// Export the constructor in compact mode
-	module.exports = (options: Partial<ioBroker.AdapterOptions> | undefined) => new autoVent(options);
+	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new autoVent(options);
 } 
 else 
 {
