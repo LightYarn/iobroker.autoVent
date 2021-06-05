@@ -44,12 +44,37 @@
             "email": ""
         }]
     },
-    "native": 
-	{
-		"ventCubeIP": "192.168.0.0",
-		"refreshRate": 5
-        
+    "native": {
+        "server": "192.168.2.126",
+        "port": 502,
+        "interval": 30,
+        "advancedfunctions": true,
+        "reconnectattempts": 10,
+        "reconnectdelayms": 10000,
+        "requesttimeoutms": 5000
     },
     "objects": [],
-    "instanceObjects": []
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Adapter-Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Whether the adapter is connected to Ventcube (Modbus-server)",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
