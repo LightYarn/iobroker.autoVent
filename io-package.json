@@ -27,7 +27,6 @@
         "mode": "daemon",
         "loglevel": "info",
         "icon": "autovent.png",
-        "dataSource": "poll",
         "materialize": true,
         "compact": true,
         "enabled": true,
