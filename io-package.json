@@ -1,5 +1,6 @@
 {
-    "common": {
+    "common": 
+    {
         "name": "autovent",
         "title": "autovent",
         "titleLang": "VentCube Automation",
@@ -9,7 +10,8 @@
 		{
             
         },         
-        "desc": {
+        "desc": 
+        {
             "en": 		"VentCube Control",
             "de": 		"VentCube Control",
             "ru": 		"VentCube Control",
@@ -29,7 +31,6 @@
         "materialize": true,
         "compact": true,
         "enabled": true,
-        "jsonConfig": true,
         "extIcon": "",
         "keywords": 
 		[
